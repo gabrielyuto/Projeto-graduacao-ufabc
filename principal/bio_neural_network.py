@@ -1,3 +1,5 @@
+from itertools import count
+
 import numpy as np
 
 def gennet_inh_lat(input_neuron, compete_neuron):
@@ -30,7 +32,7 @@ def increment_w(output, output_antes, mask, w):
 def calculation_shift(output, shift):
   displacement_speed = 0.025
 
-  return (displacement_speed * output + shift) / (1 + displacement_speed)
+  return ((displacement_speed * output) + shift) / (1 + displacement_speed)
 
 def neural_network(w, mask, train_data):
   number_neurons = w.shape[0]
@@ -38,7 +40,8 @@ def neural_network(w, mask, train_data):
   epochs = 1000
   incw = np.zeros_like(w)
   number_entries, patterns = train_data.shape
-  camadas = 1
+  camadas = 2
+  activations = []
 
   for i in range(epochs):
     for j in range(patterns):
@@ -54,14 +57,15 @@ def neural_network(w, mask, train_data):
 
         output = activation_function(inet, shift)
 
-        output = (inet > 0.0) * output
-        output[0:number_entries, 0] = PAT
+        # output = (inet > 0.0) * output
 
+        activations.append(output.flatten().tolist())
+
+        shift = calculation_shift(output_antes, shift)
         incw = increment_w(output, output_antes, mask, w)
-        shift = calculation_shift(output, shift)
         output_antes = output
 
-  return w, shift
+  return activations
 
 def teste(w, input, shift):
   number_neurons = w.shape[0]

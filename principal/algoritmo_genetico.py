@@ -1,17 +1,13 @@
 import random
 
-# Parâmetros do AG
 POPULATION_SIZE = 10
 GENERATIONS = 100
 MUTATION_RATE = 0.1
-CHROMOSOME_LENGTH = 8  # comprimento do cromossomo binário
-
+CHROMOSOME_LENGTH = 8
 
 def fitness(chromosome):
-    # Decodificar o cromossomo binário para um número inteiro
     x = int("".join(map(str, chromosome)), 2)
     return x * x
-
 
 def create_individual():
     return [random.randint(0, 1) for _ in range(CHROMOSOME_LENGTH)]
@@ -36,7 +32,7 @@ def crossover(parent1, parent2):
 def mutate(individual):
     if random.random() < MUTATION_RATE:
         point = random.randint(0, CHROMOSOME_LENGTH - 1)
-        individual[point] = 1 - individual[point]  # Flip bit
+        individual[point] = 1 - individual[point]
 
 
 def genetic_algorithm():
@@ -62,6 +58,3 @@ def genetic_algorithm():
     best_fitness = fitness(best_individual)
     print(f"\nBest solution: x = {int(''.join(map(str, best_individual)), 2)}, f(x) = {best_fitness}")
 
-
-# Executar o algoritmo genético
-genetic_algorithm()
